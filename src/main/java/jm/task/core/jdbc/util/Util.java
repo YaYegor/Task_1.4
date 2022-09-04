@@ -15,6 +15,4 @@ public class Util {
     public static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(url, username, password);
     }
-
-    // реализуйте настройку соеденения с БД
 }
