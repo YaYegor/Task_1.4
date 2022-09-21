@@ -26,39 +26,33 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public void createUsersTable() {
-        Session session = sessionFactory.openSession();
-        try {
+        try(Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             session.createNativeQuery(CREATE).executeUpdate();
             session.getTransaction().commit();
         } catch (Exception e) {
-            session.getTransaction().rollback();
+            sessionFactory.getCurrentSession().getTransaction().rollback();
             e.printStackTrace();
-        } finally {
-            session.close();
         }
     }
 
     @Override
     public void dropUsersTable() {
-        Session session = sessionFactory.openSession();
-        try {
+        try(Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             session.createNativeQuery(DROP).executeUpdate();
             session.getTransaction().commit();
         } catch (Exception e) {
-            session.getTransaction().rollback();
+            sessionFactory.getCurrentSession().getTransaction().rollback();
             e.printStackTrace();
-        } finally {
-            session.close();
         }
     }
 
 
     @Override
     public void saveUser(String name, String lastName, byte age) {
-        Session session = sessionFactory.openSession();
-        try {
+
+        try(Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             User user = new User();
             user.setName(name);
@@ -67,59 +61,47 @@ public class UserDaoHibernateImpl implements UserDao {
             session.saveOrUpdate(user);
             session.getTransaction().commit();
         } catch (Exception e) {
-            session.getTransaction().rollback();
+            sessionFactory.getCurrentSession().getTransaction().rollback();
             e.printStackTrace();
-        } finally {
-            session.close();
         }
     }
 
     @Override
     public void removeUserById(long id) {
-        Session session = sessionFactory.openSession();
-        try {
+        try(Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             User user = session.get(User.class, id);
             session.remove(user);
             session.getTransaction().commit();
         } catch (Exception e) {
-            session.getTransaction().rollback();
+            sessionFactory.getCurrentSession().getTransaction().rollback();
             e.printStackTrace();
-        }
-        finally {
-            session.close();
         }
     }
 
     @Override
     public List<User> getAllUsers() {
-        Session session = sessionFactory.openSession();
-        try {
+        try(Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             List<User> list = session.createQuery(GET).getResultList();
             session.getTransaction().commit();
             return list;
         } catch (Exception e) {
-            session.getTransaction().rollback();
+            sessionFactory.getCurrentSession().getTransaction().rollback();
             e.printStackTrace();
-        } finally {
-            session.close();
         }
         return null;
     }
 
     @Override
     public void cleanUsersTable() {
-        Session session = sessionFactory.openSession();
-        try {
+        try(Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             session.createNativeQuery(CLEAN).executeUpdate();
             session.getTransaction().commit();
         } catch (Exception e) {
-            session.getTransaction().rollback();
+            sessionFactory.getCurrentSession().getTransaction().rollback();
             e.printStackTrace();
-        } finally {
-            session.close();
         }
     }
 }
